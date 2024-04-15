@@ -36,6 +36,10 @@ const (
 	ExternalProviderName     ProviderName = "external"
 )
 
+const (
+	InstallDockerConfigFileKey = "rke1CustomClusterDockerInstall"
+)
+
 var AllRolesMachinePool = MachinePools{
 	MachinePoolConfig: machinepools.MachinePoolConfig{
 		NodeRoles: machinepools.NodeRoles{
@@ -223,4 +227,8 @@ type Config struct {
 	Advanced               *Advanced                                `json:"advanced,omitempty" yaml:"advanced,omitempty"`
 	ClusterSSHTests        []SSHTestCase                            `json:"clusterSSHTests,omitempty" yaml:"clusterSSHTests,omitempty"`
 	CRIDockerd             bool                                     `json:"criDockerd,omitempty" yaml:"criDockerd,omitempty"`
+}
+
+type RKE1CustomClusterDockerInstall struct {
+	InstallDockerURL string `json:"installDockerURL" yaml:"installDockerURL"`
 }

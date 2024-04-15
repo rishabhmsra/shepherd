@@ -473,6 +473,24 @@ func CreateProvisioningRKE1CustomCluster(client *rancher.Client, externalNodePro
 			command = createRKE1RegistrationCommand(command, node.PublicIPAddress, node.PrivateIPAddress, clustersConfig.NodePools[poolIndex])
 			logrus.Infof("Command: %s", command)
 
+			installDockerURL := GetInstallDockerURL()
+			if installDockerURL != "" {
+				_, err := node.ExecuteCommand("curl " + installDockerURL + " | sh")
+				if err != nil {
+					return nil, nil, err
+				}
+
+				_, err = node.ExecuteCommand("sudo systemctl start docker")
+				if err != nil {
+					return nil, nil, err
+				}
+
+				_, err = node.ExecuteCommand("sudo chmod 777 /var/run/docker.sock")
+				if err != nil {
+					return nil, nil, err
+				}
+			}
+
 			output, err := node.ExecuteCommand(command)
 			if err != nil {
 				return nil, nil, err
