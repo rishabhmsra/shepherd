@@ -36,6 +36,10 @@ const (
 	ExternalProviderName     ProviderName = "external"
 )
 
+const (
+	InstallDockerConfigFileKey = "rke1CustomClusterDockerInstall"
+)
+
 var AllRolesMachinePool = MachinePools{
 	MachinePoolConfig: machinepools.MachinePoolConfig{
 		NodeRoles: machinepools.NodeRoles{
@@ -197,30 +201,35 @@ type NodePools struct {
 }
 
 type Config struct {
-	NodePools              []NodePools                              `json:"nodePools,omitempty" yaml:"nodePools,omitempty"`
-	MachinePools           []MachinePools                           `json:"machinePools,omitempty" yaml:"machinePools,omitempty"`
-	CloudProvider          string                                   `json:"cloudProvider,omitempty" yaml:"cloudProvider,omitempty"`
-	Providers              []string                                 `json:"providers,omitempty" yaml:"providers,omitempty"`
-	NodeProviders          []string                                 `json:"nodeProviders,omitempty" yaml:"nodeProviders,omitempty"`
-	Hardened               bool                                     `json:"hardened,omitempty" yaml:"hardened,omitempty"`
-	AddOnConfig            *AddOnConfig                             `json:"addonConfig,omitempty" yaml:"addonConfig,omitempty"`
-	K3SKubernetesVersions  []string                                 `json:"k3sKubernetesVersion,omitempty" yaml:"k3sKubernetesVersion,omitempty"`
-	RKE1KubernetesVersions []string                                 `json:"rke1KubernetesVersion,omitempty" yaml:"rke1KubernetesVersion,omitempty"`
-	RKE2KubernetesVersions []string                                 `json:"rke2KubernetesVersion,omitempty" yaml:"rke2KubernetesVersion,omitempty"`
-	CNIs                   []string                                 `json:"cni,omitempty" yaml:"cni,omitempty"`
-	PSACT                  string                                   `json:"psact,omitempty" yaml:"psact,omitempty"`
-	PNI                    bool                                     `json:"pni,omitempty" yaml:"pni,omitempty"`
-	AgentEnvVars           *[]rkev1.EnvVar                          `json:"agentEnvVars,omitempty" yaml:"agentEnvVars,omitempty"`
-	AgentEnvVarsRKE1       *[]management.EnvVar                     `json:"agentEnvVarsRKE1,omitempty" yaml:"agentEnvVarsRKE1,omitempty"`
-	ClusterAgent           *management.AgentDeploymentCustomization `json:"clusterAgent,omitempty" yaml:"clusterAgent,omitempty"`
-	FleetAgent             *management.AgentDeploymentCustomization `json:"fleetAgent,omitempty" yaml:"fleetAgent,omitempty"`
-	ETCD                   *rkev1.ETCD                              `json:"etcd,omitempty" yaml:"etcd,omitempty"`
-	ETCDRKE1               *management.ETCDService                  `json:"etcdRKE1,omitempty" yaml:"etcdRKE1,omitempty"`
-	LabelsAndAnnotations   *LabelsAndAnnotations                    `json:"labelsAndAnnotations,omitempty" yaml:"labelsAndAnnotations,omitempty"`
-	Networking             *Networking                              `json:"networking,omitempty" yaml:"networking,omitempty"`
-	Registries             *Registries                              `json:"registries,omitempty" yaml:"registries,omitempty"`
-	UpgradeStrategy        *rkev1.ClusterUpgradeStrategy            `json:"upgradeStrategy,omitempty" yaml:"upgradeStrategy,omitempty"`
-	Advanced               *Advanced                                `json:"advanced,omitempty" yaml:"advanced,omitempty"`
-	ClusterSSHTests        []SSHTestCase                            `json:"clusterSSHTests,omitempty" yaml:"clusterSSHTests,omitempty"`
-	CRIDockerd             bool                                     `json:"criDockerd,omitempty" yaml:"criDockerd,omitempty"`
+	NodePools                      []NodePools                              `json:"nodePools,omitempty" yaml:"nodePools,omitempty"`
+	MachinePools                   []MachinePools                           `json:"machinePools,omitempty" yaml:"machinePools,omitempty"`
+	CloudProvider                  string                                   `json:"cloudProvider,omitempty" yaml:"cloudProvider,omitempty"`
+	Providers                      []string                                 `json:"providers,omitempty" yaml:"providers,omitempty"`
+	NodeProviders                  []string                                 `json:"nodeProviders,omitempty" yaml:"nodeProviders,omitempty"`
+	Hardened                       bool                                     `json:"hardened,omitempty" yaml:"hardened,omitempty"`
+	AddOnConfig                    *AddOnConfig                             `json:"addonConfig,omitempty" yaml:"addonConfig,omitempty"`
+	K3SKubernetesVersions          []string                                 `json:"k3sKubernetesVersion,omitempty" yaml:"k3sKubernetesVersion,omitempty"`
+	RKE1KubernetesVersions         []string                                 `json:"rke1KubernetesVersion,omitempty" yaml:"rke1KubernetesVersion,omitempty"`
+	RKE2KubernetesVersions         []string                                 `json:"rke2KubernetesVersion,omitempty" yaml:"rke2KubernetesVersion,omitempty"`
+	CNIs                           []string                                 `json:"cni,omitempty" yaml:"cni,omitempty"`
+	PSACT                          string                                   `json:"psact,omitempty" yaml:"psact,omitempty"`
+	PNI                            bool                                     `json:"pni,omitempty" yaml:"pni,omitempty"`
+	AgentEnvVars                   *[]rkev1.EnvVar                          `json:"agentEnvVars,omitempty" yaml:"agentEnvVars,omitempty"`
+	AgentEnvVarsRKE1               *[]management.EnvVar                     `json:"agentEnvVarsRKE1,omitempty" yaml:"agentEnvVarsRKE1,omitempty"`
+	ClusterAgent                   *management.AgentDeploymentCustomization `json:"clusterAgent,omitempty" yaml:"clusterAgent,omitempty"`
+	FleetAgent                     *management.AgentDeploymentCustomization `json:"fleetAgent,omitempty" yaml:"fleetAgent,omitempty"`
+	ETCD                           *rkev1.ETCD                              `json:"etcd,omitempty" yaml:"etcd,omitempty"`
+	ETCDRKE1                       *management.ETCDService                  `json:"etcdRKE1,omitempty" yaml:"etcdRKE1,omitempty"`
+	LabelsAndAnnotations           *LabelsAndAnnotations                    `json:"labelsAndAnnotations,omitempty" yaml:"labelsAndAnnotations,omitempty"`
+	Networking                     *Networking                              `json:"networking,omitempty" yaml:"networking,omitempty"`
+	Registries                     *Registries                              `json:"registries,omitempty" yaml:"registries,omitempty"`
+	UpgradeStrategy                *rkev1.ClusterUpgradeStrategy            `json:"upgradeStrategy,omitempty" yaml:"upgradeStrategy,omitempty"`
+	Advanced                       *Advanced                                `json:"advanced,omitempty" yaml:"advanced,omitempty"`
+	ClusterSSHTests                []SSHTestCase                            `json:"clusterSSHTests,omitempty" yaml:"clusterSSHTests,omitempty"`
+	CRIDockerd                     bool                                     `json:"criDockerd,omitempty" yaml:"criDockerd,omitempty"`
+	RKE1CustomClusterDockerInstall RKE1CustomClusterDockerInstall           `json:"rke1CustomClusterDockerInstall,omitempty" yaml:"rke1CustomClusterDockerInstall,omitempty"`
+}
+
+type RKE1CustomClusterDockerInstall struct {
+	InstallDockerURL string `json:"installDockerURL" yaml:"installDockerURL"`
 }
