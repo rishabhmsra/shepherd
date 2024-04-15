@@ -1,6 +1,9 @@
 package provisioning
 
 import (
+	"github.com/rancher/shepherd/extensions/provisioninginput"
+	"github.com/rancher/shepherd/pkg/config"
+	"github.com/sirupsen/logrus"
 	corev1 "k8s.io/api/core/v1"
 )
 
@@ -11,4 +14,11 @@ type CustomClusterConfig struct {
 	SpecifyPrivateIP     bool                 `json:"specifyPrivateIP" yaml:"specifyPrivateIP"`
 	SpecifyPublicIP      bool                 `json:"specifyPublicIP" yaml:"specifyPublicIP"`
 	NodeNamePrefix       string               `json:"nodeNamePrefix" yaml:"nodeNamePrefix"`
+}
+
+func GetInstallDockerURL() string {
+	installDockerCfg := &provisioninginput.RKE1CustomClusterDockerInstall{}
+	config.LoadConfig(provisioninginput.InstallDockerConfigFileKey, installDockerCfg)
+	logrus.Info(installDockerCfg.InstallDockerURL)
+	return installDockerCfg.InstallDockerURL
 }
